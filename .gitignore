@@ -1,0 +1,15 @@
+*.pdf
+*.swp
+*.swo
+*.png
+*.svg
+*.h5
+*.mat
+*.so
+.DS_Store
+._.DS_Store
+
+# Objects created by cuda compiler
+*.ptx
+/data
+results
