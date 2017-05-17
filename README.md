@@ -32,7 +32,7 @@ To run encoding in a GPU, you will also need
 
 * [CUDArt](https://github.com/JuliaGPU/CUDArt.jl) -- the CUDA runtime environment
 * [CUBLAS](https://github.com/JuliaGPU/CUBLAS.jl) -- for fast matrix multiplication in the GPU
-* A CUDA-enable GPU with compute capability 3.5 or higher. We have tested our code on K40 and Titan X GPUs
+* A CUDA-enabled GPU with compute capability 3.5 or higher. We have tested our code on K40 and Titan X GPUs
 
 Finally, to run the sparse encoding demo you will need Matlab to run the
 [SPGL1](https://github.com/mpf/spgl1) solver by van den Berg and Friedlander, as
