@@ -25,6 +25,7 @@ function train_chainq{T <: AbstractFloat}(
 
   # Initialize C
   C = update_codebooks_chain( RX, B, h, V )
+  @printf("%3d %e\n", -2, qerror( RX, B, C ))
 
   # Initialize B
   B   = encoding_viterbi( RX, C, V )

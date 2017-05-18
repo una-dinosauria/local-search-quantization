@@ -14,11 +14,11 @@ include("utils.jl")
 
   if codebook_upd_method == "lsqr"
     for i = IDX
-      K[i,:], _ = IterativeSolvers.lsqr( C, vec(X[i, :]) );
+      K[i,:] = IterativeSolvers.lsqr( C, vec(X[i, :]) );
     end
   elseif codebook_upd_method == "lsmr"
     for i = IDX
-      K[i,:], _ = IterativeSolvers.lsmr( C, vec(X[i, :]) );
+      K[i,:] = IterativeSolvers.lsmr( C, vec(X[i, :]) );
     end
   else
     error("Codebook update method unknown: ", codebook_upd_method)
@@ -34,11 +34,11 @@ end
 
   if codebook_upd_method == "lsqr"
     for i = IDX
-      K[i,:], _ = IterativeSolvers.lsqr( C, vec(X[i, :]) );
+      K[i,:] = IterativeSolvers.lsqr( C, vec(X[i, :]) );
     end
   elseif codebook_upd_method == "lsmr"
     for i = IDX
-      K[i,:], _ = IterativeSolvers.lsmr( C, vec(X[i, :]) );
+      K[i,:] = IterativeSolvers.lsmr( C, vec(X[i, :]) );
     end
   else
     error("Codebook update method unknown: ", codebook_upd_method)
@@ -111,8 +111,8 @@ end
   IDX::UnitRange{Int64} )
 
   for i = IDX
-    rcbs         = cat( 1, subcbs[find(dim2C[i,:])]... );
-    K[i,rcbs], _ = lsqr( C[:,rcbs], vec(X[i, :]) );
+    rcbs      = cat( 1, subcbs[find(dim2C[i,:])]... );
+    K[i,rcbs] = lsqr( C[:,rcbs], vec(X[i, :]) );
   end
 end
 

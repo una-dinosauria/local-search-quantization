@@ -14,7 +14,7 @@ The code in this repository was mostly written by [Julieta Martinez](http://www.
 ## Dependencies
 
 Our code is mostly written in [Julia](http://julialang.org/), and should run
-under version 0.5.0 or later. To get Julia, go to the
+under version 0.5.2 or later. To get Julia, go to the
 [Julia downloads page](http://julialang.org/downloads/) and install the latest
 stable release.
 
@@ -25,7 +25,7 @@ We use a number of dependencies that you have to install using
 * [Distributions](https://github.com/JuliaStats/Distributions.jl) -- for random inits
 * [Distances](https://github.com/JuliaStats/Distances.jl) -- for quick distance computation
 * [DistributedArrays](https://github.com/JuliaParallel/DistributedArrays.jl) -- for parallelizing in the CPU
-* [IterativeSolvers](https://github.com/JuliaLang/IterativeSolvers.jl) -- for [LSQR](https://github.com/JuliaMath/IterativeSolvers.jl/blob/master/src/lsqr.jl)
+* [IterativeSolvers](https://github.com/JuliaLang/IterativeSolvers.jl) -- for [LSQR](https://github.com/JuliaMath/IterativeSolvers.jl/blob/master/src/lsqr.jl); while #1 is open, you will have to also run `Pkg.checkout("IterativeSolvers","master")` to get the bug-free latest version
 * [Clustering](https://github.com/JuliaStats/Clustering.jl) -- for k-means
 
 To run encoding in a GPU, you will also need
@@ -176,6 +176,12 @@ quantization in the GPU", 4th Workshop on Web-scale Vision and Social Media
   iterations. You can also control the number of ILS iterations to use
   for database encoding in the LSQ demos; which corresponds to LSQ-16 and LSQ-32
   in the paper.
+
+* **Q:** *Why do I see all those warnings when I run your code?*
+
+  **A:** Julia 0.5 issues a warning when a method is redefined more than once in
+  the Main scope. This is annoying for many people and will disappear in Julia
+  0.6 (see https://github.com/JuliaLang/julia/issues/18725)
 
 ## Acknowledgments
 

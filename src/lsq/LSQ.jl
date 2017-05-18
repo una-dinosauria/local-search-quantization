@@ -39,6 +39,7 @@ function train_lsq{T <: AbstractFloat}(
   for i = 1:m
     C[i] = R * C[i]
   end
+  @printf("%3d %e \n", -2, qerror( X, B, C ));
 
   # Initialize B
   for i = 1:ilsiter
