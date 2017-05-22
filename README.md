@@ -25,7 +25,7 @@ We use a number of dependencies that you have to install using
 * [Distributions](https://github.com/JuliaStats/Distributions.jl) -- for random inits
 * [Distances](https://github.com/JuliaStats/Distances.jl) -- for quick distance computation
 * [DistributedArrays](https://github.com/JuliaParallel/DistributedArrays.jl) -- for parallelizing in the CPU
-* [IterativeSolvers](https://github.com/JuliaLang/IterativeSolvers.jl) -- for [LSQR](https://github.com/JuliaMath/IterativeSolvers.jl/blob/master/src/lsqr.jl); while [#1](https://github.com/una-dinosauria/local-search-quantization/issues/1) is open, you will have to also run `Pkg.checkout("IterativeSolvers","master")` to get the bug-free latest version
+* [IterativeSolvers](https://github.com/JuliaLang/IterativeSolvers.jl) -- for [LSQR](https://github.com/JuliaMath/IterativeSolvers.jl/blob/master/src/lsqr.jl)
 * [Clustering](https://github.com/JuliaStats/Clustering.jl) -- for k-means
 
 To run encoding in a GPU, you will also need
