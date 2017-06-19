@@ -22,7 +22,7 @@ function linscan_pq(
     dists, res, B, cat(3,C...), X, Cint(n), Cuint(nq),
     Cint(b), Cint(k), Cint(m), Cint(d), Cint(d/m) )
 
-  return dists, res+1
+  return dists, (res.+=1)
 
 end
 
