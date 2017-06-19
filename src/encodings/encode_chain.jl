@@ -1,6 +1,4 @@
 
-using DistributedArrays
-
 @everywhere function encode_viterbi!{T <: AbstractFloat}(
   CODES::SharedMatrix{Int16},  # out. Where to save the result
   X::Matrix{T},                # in. d-by-n matrix to encode

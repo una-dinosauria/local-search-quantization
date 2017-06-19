@@ -7,7 +7,7 @@ include("utils.jl")
 # Update a dimension of a codebook using LSQR or LSMR
 @everywhere function updatecb!(
   K::SharedMatrix{Float32},
-  C::Base.SparseMatrix.SparseMatrixCSC{Int32,Int32},
+  C::SparseMatrixCSC{Int32,Int32},
   X::Matrix{Float32},
   IDX::UnitRange{Int64},
   codebook_upd_method::AbstractString="lsqr")   # choose the codebook update method out of lsqr or lsmr
@@ -27,7 +27,7 @@ end
 
 @everywhere function updatecb!(
   K::SharedMatrix{Float32},
-  C::Base.SparseMatrix.SparseMatrixCSC{Float32,Int32},
+  C::SparseMatrixCSC{Float32,Int32},
   X::Matrix{Float32},
   IDX::UnitRange{Int64},
   codebook_upd_method::AbstractString="lsqr")   # choose the codebook update method out of lsqr or lsmr
