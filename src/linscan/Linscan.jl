@@ -103,13 +103,13 @@ function eval_recall{T <: Integer}(
 
   for i = [1 2 5 10 20 50 100 200 500 1000 2000 5000 10000]
     if i <= k
-      recall_at_i[i] = length( find( (nn_ranks .<= i) & (nn_ranks .<= k) )) ./ nquery * 100;
+      recall_at_i[i] = length( find( (nn_ranks .<= i) .& (nn_ranks .<= k) )) ./ nquery * 100;
       println("r@$(i) = $(recall_at_i[i])");
     end
   end
 
   for i = 1:k
-    recall_at_i[i] = length(find( (nn_ranks .<= i) & (nn_ranks .<= k) )) ./ nquery;
+    recall_at_i[i] = length(find( (nn_ranks .<= i) .& (nn_ranks .<= k) )) ./ nquery;
   end
 
   return recall_at_i
