@@ -183,7 +183,7 @@ function encoding_icm{T <: AbstractFloat}(
   arebetter = newcost .< prevcost;
   if V println("$(sum(arebetter)) new codes are better"); end
 
-  B[:, ~arebetter] = oldB[:, ~arebetter]
+  B[:, .~arebetter] = oldB[:, .~arebetter]
 
   return B
 end

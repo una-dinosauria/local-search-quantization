@@ -64,7 +64,7 @@ function update_codebooks(
   m, _   = size(B)
   C = sparsify_codes( B, h )
 
-  K = SharedArray(Float32, d, size(C,2))
+  K = SharedArray{Float32, 2}((d, size(C,2)))
   if nworkers() == 1
     updatecb!( K, C, X, 1:d )
   else
@@ -135,7 +135,7 @@ function update_codebooks_generic(
   dim2C = zeros(Bool, d, m);
   for i = 1:m; dim2C[ odims[i], i ] = true; end
 
-  K = SharedArray(Float32, d, h*m);
+  K = SharedArray{Float32,2}((d, h*m));
   subcbs = splitarray(1:(h*m), m);
 
   if nworkers() == 1
