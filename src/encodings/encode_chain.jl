@@ -103,7 +103,7 @@ function encoding_viterbi(
   for i = 1:(m-1)
     binaries[i] = 2 * C[i]' * C[i+1];
   end
-  CODES = SharedArray(Int16, m, n);
+  CODES = SharedArray{Int16,2}((m, n));
 
   if nworkers() == 1
     encode_viterbi!( CODES, X, C, binaries, 1:n );
