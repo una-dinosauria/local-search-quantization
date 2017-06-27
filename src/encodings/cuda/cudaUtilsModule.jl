@@ -86,8 +86,8 @@ function condition_icm3(
   fun = ptxdict[(device(), "condition_icm3")];
 
   cudacall( fun, nblocks, nthreads,
-    (Ptr{Cfloat}, Ptr{Cfloat}, Ptr{Cuchar}, Ptr{Cint}, Cint, Cint),
-    (d_ub, d_bbs, d_codek, conditioning, m, n));
+    (Ptr{Cfloat}, Ptr{Cfloat}, Ptr{Cuchar}, Cint, Cint, Cint),
+    d_ub, d_bbs, d_codek, conditioning, m, n)
 
   return nothing
 end
@@ -102,7 +102,7 @@ function vec_add(
   fun = ptxdict[( device(), "vec_add" )];
   cudacall( fun, nblocks, nthreads,
     ( Ptr{Cfloat}, Ptr{Cfloat}, Cint, Cint ),
-    ( d_matrix, d_vec, n, h ));
+    d_matrix, d_vec, n, h);
 end
 
 # function veccost(
@@ -131,8 +131,8 @@ function veccost2(
 
   fun = ptxdict[( device(), "veccost2" )];
   cudacall( fun, nblocks, nthreads,
-    ( Prt{Cfloat}, Ptr{Cfloat}, Ptr{Cuchar}, Ptr{Cfloat}, Cint, Cint, Cint),
-    ( d_rx, d_codebooks, d_codes, d_veccost, d, m, n ),
+    ( Ptr{Cfloat}, Ptr{Cfloat}, Ptr{Cuchar}, Ptr{Cfloat}, Cint, Cint, Cint),
+    d_rx, d_codebooks, d_codes, d_veccost, d, m, n,
     shmem=Int( d*sizeof(Cfloat)) );
 end
 
@@ -146,8 +146,8 @@ function perturb(
 
   fun = ptxdict[( device(), "perturb" )];
   cudacall( fun, nblocks, nthreads,
-    ( CudaPtr, Ptr{Cuchar}, Cint, Cint, Cint ),
-    ( state, codes, n, m, k ));
+    (Ptr{Void}, Ptr{Cuchar}, Cint, Cint, Cint),
+    state, codes, n, m, k);
 end
 
 function setup_kernel(
@@ -156,9 +156,9 @@ function setup_kernel(
   state::CudaPtr )
 
   fun = ptxdict[( device(), "setup_kernel" )];
-  cudacall( fun, (nblocks,), (nthreads,),
-    ( Cint, CudaPtr ),
-    ( n, state ));
+  cudacall( fun, nblocks, nthreads,
+    (Cint, Ptr{Void}),
+    n, state);
 end
 
 end #cudaUtilsModule

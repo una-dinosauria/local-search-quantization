@@ -135,7 +135,7 @@ function encode_icm_cuda(
         to_condition_r = to_condition[:, to_look_r];
       end
 
-      d_newB = CudaArray( convert(Matrix{Cuchar}, newB-1 ) )
+      d_newB = CudaArray( convert(Matrix{Cuchar}, newB.-1 ) )
 
       # Perturn npert entries in each code
       CudaUtilsModule.perturb( n, (1,m), d_state, d_newB, Cint(n), Cint(m), Cint(npert) )
@@ -178,8 +178,9 @@ function encode_icm_cuda(
         end # for k = to_look_r
       end # for j = 1:icmiter
 
-      newB = to_host( d_Bs );
-      newB = convert(Matrix{Int16}, newB') + 1;
+      newB = to_host( d_Bs )
+      newB = convert(Matrix{Int16}, newB')
+      newB .+= 1
 
       # Keep only the codes that improved
       CudaUtilsModule.veccost2(n, (1, d), d_RX, d_C, d_Bs, d_newcost, Cint(d), Cint(m), Cint(n));
@@ -193,7 +194,7 @@ function encode_icm_cuda(
       arebetter = newcost .< prevcost;
       println("$(sum(arebetter)) new codes are better")
 
-      newB[:, ~arebetter] = B[:, ~arebetter];
+      newB[:, .~arebetter] = B[:, .~arebetter];
       B = get_new_B( newB, m, n );
       end
 
