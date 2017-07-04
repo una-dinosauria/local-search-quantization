@@ -81,7 +81,7 @@ function train_lsq{T <: AbstractFloat}(
   cbnorms  = dbnormsq.centers;
 
   # Add the dbnorms to the codes
-  B_norms    = reshape( dbnormsq.assignments, 1,n )
+  B_norms  = reshape( dbnormsq.assignments, 1, n )
 
   return C, B, cbnorms, B_norms, obj
 

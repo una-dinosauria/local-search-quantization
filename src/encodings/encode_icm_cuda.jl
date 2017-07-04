@@ -79,7 +79,7 @@ function encode_icm_cuda(
     d_prevcost = CudaArray(Cfloat, n)
     d_newcost  = CudaArray(Cfloat, n)
 
-    CUBLAS.cublasCreate_v2( CUBLAS.cublashandle )
+    # CUBLAS.cublasCreate_v2( CUBLAS.cublashandle )
     d_unaries   = Vector{CudaArray{Float32}}( m )
     for j = 1:m
       # -2 * C' * X
@@ -223,7 +223,7 @@ function encode_icm_cuda(
       end # end if i in ilsiters
     end # end for i=1:max(ilsiters)
 
-    #CUBLAS.cublasDestroy_v2( CUBLAS.cublashandle )
+    # CUBLAS.cublasDestroy_v2( CUBLAS.cublashandle )
     CudaUtilsModule.finit()
   end # do devlist
 
