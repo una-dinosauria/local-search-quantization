@@ -7,7 +7,7 @@ include("utils.jl")
 # Update a dimension of a codebook using LSQR or LSMR
 @everywhere function updatecb!(
   K::SharedMatrix{Float32},
-  C::Base.SparseMatrix.SparseMatrixCSC{Int32,Int32},
+  C::SparseMatrixCSC{Int32,Int32},
   X::Matrix{Float32},
   IDX::UnitRange{Int64},
   codebook_upd_method::AbstractString="lsqr")   # choose the codebook update method out of lsqr or lsmr
@@ -27,7 +27,7 @@ end
 
 @everywhere function updatecb!(
   K::SharedMatrix{Float32},
-  C::Base.SparseMatrix.SparseMatrixCSC{Float32,Int32},
+  C::SparseMatrixCSC{Float32,Int32},
   X::Matrix{Float32},
   IDX::UnitRange{Int64},
   codebook_upd_method::AbstractString="lsqr")   # choose the codebook update method out of lsqr or lsmr
@@ -64,7 +64,7 @@ function update_codebooks(
   m, _   = size(B)
   C = sparsify_codes( B, h )
 
-  K = SharedArray(Float32, d, size(C,2))
+  K = SharedArray{Float32, 2}((d, size(C,2)))
   if nworkers() == 1
     updatecb!( K, C, X, 1:d )
   else
@@ -135,7 +135,7 @@ function update_codebooks_generic(
   dim2C = zeros(Bool, d, m);
   for i = 1:m; dim2C[ odims[i], i ] = true; end
 
-  K = SharedArray(Float32, d, h*m);
+  K = SharedArray{Float32,2}((d, h*m));
   subcbs = splitarray(1:(h*m), m);
 
   if nworkers() == 1

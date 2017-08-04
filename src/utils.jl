@@ -1,6 +1,4 @@
 
-using DistributedArrays
-
 # For eval_recall
 using Distances
 

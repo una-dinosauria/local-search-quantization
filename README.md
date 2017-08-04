@@ -14,7 +14,7 @@ The code in this repository was mostly written by [Julieta Martinez](http://www.
 ## Dependencies
 
 Our code is mostly written in [Julia](http://julialang.org/), and should run
-under version 0.5.2 or later. To get Julia, go to the
+under version 0.6 or later. To get Julia, go to the
 [Julia downloads page](http://julialang.org/downloads/) and install the latest
 stable release.
 
@@ -24,7 +24,6 @@ We use a number of dependencies that you have to install using
 * [HDF5](https://github.com/JuliaIO/HDF5.jl) -- for reading/writing data
 * [Distributions](https://github.com/JuliaStats/Distributions.jl) -- for random inits
 * [Distances](https://github.com/JuliaStats/Distances.jl) -- for quick distance computation
-* [DistributedArrays](https://github.com/JuliaParallel/DistributedArrays.jl) -- for parallelizing in the CPU
 * [IterativeSolvers](https://github.com/JuliaLang/IterativeSolvers.jl) -- for [LSQR](https://github.com/JuliaMath/IterativeSolvers.jl/blob/master/src/lsqr.jl)
 * [Clustering](https://github.com/JuliaStats/Clustering.jl) -- for k-means
 
