@@ -9,7 +9,10 @@ from ECCV 2016, and
 [*Solving multi-codebook quantization in the GPU*](https://www.cs.ubc.ca/~julm/papers/eccvw16.pdf),
 from VSM (ECCV workshops) 2016.
 
-The code in this repository was mostly written by [Julieta Martinez](http://www.cs.ubc.ca/~julm/) and Joris Clement.
+The code in this repository was mostly written by
+[Julieta Martinez](https://github.com/una-dinosauria/),
+[Joris Clement](https://github.com/flyingdutchman23), and
+[Shobhit Zakhmi](https://github.com/Shobhit31).
 
 ## Dependencies
 
@@ -26,10 +29,11 @@ We use a number of dependencies that you have to install using
 * [Distances](https://github.com/JuliaStats/Distances.jl) -- for quick distance computation
 * [IterativeSolvers](https://github.com/JuliaLang/IterativeSolvers.jl) -- for [LSQR](https://github.com/JuliaMath/IterativeSolvers.jl/blob/master/src/lsqr.jl)
 * [Clustering](https://github.com/JuliaStats/Clustering.jl) -- for k-means
+* [Rayuela](https://github.com/una-dinosauria/Rayuela.jl) -- for quantization implementations
 
 To run encoding in a GPU, you will also need
 
-* [CUDArt](https://github.com/JuliaGPU/CUDArt.jl) -- the CUDA runtime environment
+* [CUDAdrv](https://github.com/JuliaGPU/CUDAdrv.jl) -- the CUDA driver
 * [CUBLAS](https://github.com/JuliaGPU/CUBLAS.jl) -- for fast matrix multiplication in the GPU
 * A CUDA-enabled GPU with compute capability 3.5 or higher. We have tested our code on K40 and Titan X GPUs
 
