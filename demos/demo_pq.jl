@@ -2,8 +2,6 @@
 import Rayuela
 
 include("../src/read/read_datasets.jl")
-# include("../src/utils.jl")
-# include("../src/pq/PQ.jl");
 include("../src/linscan/Linscan.jl")
 
 function demo_pq(
@@ -24,22 +22,22 @@ function demo_pq(
   x_train = read_dataset(dataset_name, ntrain)
   x_base  = read_dataset(dataset_name * "_base", nbase)
   x_query = read_dataset(dataset_name * "_query", nquery, verbose)
-
-  # === Train ===
-  C, B, train_error = Rayuela.train_pq(x_train, m, h, maxiter, verbose)
-  @printf("Error in training is %e\n", train_error)
-
-  # === Encode the base set ===
-  B_base     = Rayuela.quantize_pq( x_base, C, verbose )
-  base_error = Rayuela.qerror_pq( x_base, B_base, C )
-  @printf("Error in base is %e\n", base_error)
-
-  # === Compute recall ===
   gt      = read_dataset( dataset_name * "_groundtruth", nquery, verbose )
   if dataset_name == "SIFT1M" || dataset_name == "GIST1M"
     gt = gt .+ 1
   end
   gt = convert( Vector{UInt32}, gt[1,1:nquery] )
+
+  # === Train ===
+  C, B, train_error = train_pq(x_train, m, h, maxiter, verbose)
+  @printf("Error in training is %e\n", train_error)
+
+  # === Encode the base set ===
+  B_base     = quantize_pq( x_base, C, verbose )
+  base_error = qerror_pq( x_base, B_base, C )
+  @printf("Error in base is %e\n", base_error)
+
+  # === Compute recall ===
   B_base  = convert( Matrix{UInt8}, B_base-1 )
 
   print("Querying m=$m ... ")

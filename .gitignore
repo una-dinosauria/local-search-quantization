@@ -12,4 +12,5 @@
 # Objects created by cuda compiler
 *.ptx
 /data
-results
+/results
+/deps
