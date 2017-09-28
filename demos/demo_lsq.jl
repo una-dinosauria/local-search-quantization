@@ -1,9 +1,11 @@
 
+using Rayuela
+
 include("../src/read/read_datasets.jl")
-include("../src/utils.jl")
-include("../src/opq/OPQ.jl");
-include("../src/chainq/chainq.jl");
-include("../src/lsq/LSQ.jl");
+# include("../src/utils.jl")
+# include("../src/opq/OPQ.jl");
+# include("../src/chainq/chainq.jl");
+# include("../src/lsq/LSQ.jl");
 include("../src/linscan/Linscan.jl");
 
 function demo_lsq(
@@ -22,13 +24,13 @@ function demo_lsq(
   # === OPQ initialization ===
   x_train              = read_dataset(dataset_name, nread )
   d, _                 = size( x_train )
-  C, B, R, train_error = train_opq(x_train, m, h, niter, "natural", verbose)
+  C, B, R, train_error = Rayuela.train_opq(x_train, m, h, niter, "natural", verbose)
   @printf("Error after OPQ is %e\n", train_error[end])
 
-  # === ChainQ initialization ===
-  B                    = convert( Matrix{Int16}, B )
-  C, B, R, train_error = train_chainq( x_train, m, h, R, B, C, niter )
-  @printf("Error after ChainQ is %e\n", train_error[end])
+  # # === ChainQ initialization ===
+  # B                    = convert( Matrix{Int16}, B )
+  # C, B, R, train_error = Rayuela.train_chainq( x_train, m, h, R, B, C, niter )
+  # @printf("Error after ChainQ is %e\n", train_error[end])
 
   # === LSQ train ===
   ilsiter = 8
@@ -36,18 +38,18 @@ function demo_lsq(
   randord = true
   npert   = 4
 
-  C, B, cbnorms, B_norms, obj = train_lsq( x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert )
+  C, B, cbnorms, B_norms, obj = Rayuela.train_lsq( x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert )
   cbnorms = vec( cbnorms[:] )
 
   # === Encode the base set ===
   nread_base   = Int(1e6)
-  x_base       = read_dataset(dataset_name * "_base", nread_base )
-  B_base       = randinit(nread_base, m, h) # initialize B at random
+  x_base       = read_dataset(dataset_name * "_base", nread_base)
+  B_base       = convert(Matrix{Int16}, rand(1:h, m, nread_base))
 
   ilsiter_base = 16 # LSQ-16 in the paper
   for i = 1:ilsiter_base
     @printf("Iteration %02d / %02d\n", i, ilsiter_base)
-    @time B_base = encoding_icm( x_base, B_base, C, icmiter, randord, npert, verbose )
+    @time B_base = Rayuela.encoding_icm( x_base, B_base, C, icmiter, randord, npert, verbose )
   end
   base_error = qerror( x_base, B_base, C )
   @printf("Error in base is %e\n", base_error)

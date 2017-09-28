@@ -5,9 +5,9 @@ include("../src/read/read_datasets.jl")
 include("../src/linscan/Linscan.jl")
 
 # === Hyperparams ===
-m       = 4 # Number of codebooks
+m       = 8 # Number of codebooks
 h       = 256 # Number of entries per codebook
-niter   = 10  # Number of iterations for training
+niter   = 25  # Number of iterations for training
 verbose = true # Print progress for the user
 ntrain, nbase, nquery  = Int(1e5), Int(1e6), Int(1e4) # Train, base and query size
 knn     = Int(1e3) # Compute recall up to
