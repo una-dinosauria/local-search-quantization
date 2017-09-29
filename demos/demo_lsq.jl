@@ -62,7 +62,7 @@ function demo_lsq(
   x_query = read_dataset( dataset_name * "_query", nquery, verbose )
   gt      = read_dataset( dataset_name * "_groundtruth", nquery, verbose )
   if dataset_name == "SIFT1M" || dataset_name == "GIST1M"
-    gt = gt + 1;
+    gt = gt .+ 1
   end
   gt           = convert( Vector{UInt32}, gt[1,1:nquery] )
   B_base       = convert( Matrix{UInt8}, B_base-1 )
