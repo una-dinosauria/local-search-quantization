@@ -67,7 +67,7 @@ function demo_lsq(
   @time dists, idx = linscan_lsq( B_base[1:end-1,:], x_query, C, db_norms, eye(Float32, d), knn )
   println("done")
 
-  idx = convert( Matrix{UInt32}, idx );
+  idx = convert( Matrix{UInt32}, idx )
   rec = eval_recall( gt, idx, knn )
 
 end
