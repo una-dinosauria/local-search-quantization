@@ -1,9 +1,7 @@
 
+using Rayuela
+
 include("../src/read/read_datasets.jl")
-include("../src/utils.jl")
-include("../src/opq/OPQ.jl");
-include("../src/chainq/chainq.jl");
-include("../src/lsq/LSQ.jl");
 include("../src/encodings/encode_icm_cuda.jl");
 include("../src/linscan/Linscan.jl");
 
@@ -43,7 +41,7 @@ function demo_lsq(
   # === Encode the base set ===
   nread_base   = Int(1e6)
   x_base       = read_dataset(dataset_name * "_base", nread_base )
-  B_base       = randinit(nread_base, m, h) # initialize B at random
+  B_base       = convert(Matrix{Int16}, rand(1:h, m, nread_base)) # initialize B at random
 
   ilsiter_base = 16 # LSQ-16 in the paper
   B_base, _ = encode_icm_cuda( x_base, B_base, C, cbnorms, [ilsiter_base], icmiter, npert, randord, true )
@@ -59,7 +57,7 @@ function demo_lsq(
   x_query = read_dataset( dataset_name * "_query", nquery, verbose )
   gt      = read_dataset( dataset_name * "_groundtruth", nquery, verbose )
   if dataset_name == "SIFT1M" || dataset_name == "GIST1M"
-    gt = gt + 1;
+    gt = gt .+ 1
   end
   gt           = convert( Vector{UInt32}, gt[1,1:nquery] )
   B_base       = convert( Matrix{UInt8}, B_base-1 )
