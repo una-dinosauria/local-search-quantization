@@ -3,11 +3,11 @@ using Distances
 
 # Linear scan using PQ codebooks no rotation
 function linscan_pq(
-  B::Matrix{UInt8},           # m-by-n. The database, encoded
+  B::Matrix{UInt8},          # m-by-n. The database, encoded
   X::Matrix{Cfloat},         # d-by-nq. The queries.
   C::Vector{Matrix{Cfloat}}, # The cluster centers
-  b:: Int,                    # Number of bits per code -- log2(h) * m
-  k:: Int = 10000)            # Number of knn results to return
+  b:: Int,                   # Number of bits per code -- log2(h) * m
+  k:: Int = 10000)           # Number of knn results to return
 
   m, n  = size( B )
   d, nq = size( X )
@@ -23,6 +23,53 @@ function linscan_pq(
     Cint(b), Cint(k), Cint(m), Cint(d), Cint(d/m) )
 
   return dists, (res.+=1)
+
+end
+
+function linscan_pq_julia(
+  B::Matrix{Int16},          # m-by-n. The database, encoded
+  X::Matrix{Cfloat},         # d-by-nq. The queries.
+  C::Vector{Matrix{Cfloat}}, # The cluster centers
+  knn:: Int = 10000)           # Number of knn results to return
+
+  m, n  = size( B )
+  d, nq = size( X )
+  subdims = splitarray( 1:d, m )
+
+  @show knn, nq
+  dists = zeros( Cfloat, knn, nq )
+  idx   = zeros(  Cuint, knn, nq )
+
+  # Compute distance tables between queries and
+  tables = Vector{Matrix{Cfloat}}(m)
+  for i = 1:m
+    tables[i] = Distances.pairwise(Distances.SqEuclidean(), X[subdims[i],:], C[i])
+  end
+
+  # Compute approximate distances and sort
+  @inbounds for i = 1:nq # Loop over each query
+
+    println(i)
+
+    xq       = X[:,i] # The query
+    xq_dists = zeros(Cfloat, n)
+
+    for j = 1:m # Loop over each codebook
+      t = tables[j][i,:]
+
+      @simd for k = 1:n # Loop over each code
+        xq_dists[k] += t[ B[j,k] ]
+      end
+    end
+
+    p = sortperm(xq_dists; alg=PartialQuickSort(knn))
+
+    dists[:,i] = xq_dists[ p[1:knn] ]
+    idx[:,i]   = p[1:knn]
+
+  end
+
+  return dists, idx
 
 end
 
