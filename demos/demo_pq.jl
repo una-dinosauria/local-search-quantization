@@ -43,6 +43,7 @@ function demo_pq(
   print("Querying m=$m ... ")
   # B_base  = convert( Matrix{UInt8}, B_base-1 )
   # @time dists, idx = linscan_pq( B_base, x_query[:,1:nquery], C, b, knn )
+
   @time dists, idx = linscan_pq_julia( B_base, x_query[:,1:nquery], C, knn )
   println("done")
 

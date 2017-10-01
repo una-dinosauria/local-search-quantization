@@ -39,6 +39,7 @@ function linscan_pq_julia(
   @show knn, nq
   dists = zeros( Cfloat, knn, nq )
   idx   = zeros(  Cuint, knn, nq )
+  Bt = B'
 
   # Compute distance tables between queries and
   tables = Vector{Matrix{Cfloat}}(m)
@@ -47,22 +48,24 @@ function linscan_pq_julia(
   end
 
   # Compute approximate distances and sort
-  @inbounds for i = 1:nq # Loop over each query
+  for i = 1:nq # Loop over each query
 
     println(i)
 
-    xq       = X[:,i] # The query
-    xq_dists = zeros(Cfloat, n)
+    xq        = X[:,i] # The query
+    xq_dists  = zeros(Cfloat, n)
 
-    for j = 1:m # Loop over each codebook
+    @inbounds for j = 1:m # Loop over each codebook
       t = tables[j][i,:]
 
       @simd for k = 1:n # Loop over each code
-        xq_dists[k] += t[ B[j,k] ]
+        # xq_dists[k] += t[ B[j,k] ]
+        xq_dists[k] += t[ Bt[k,j] ]
       end
     end
 
     p = sortperm(xq_dists; alg=PartialQuickSort(knn))
+    p = 1:n
 
     dists[:,i] = xq_dists[ p[1:knn] ]
     idx[:,i]   = p[1:knn]
