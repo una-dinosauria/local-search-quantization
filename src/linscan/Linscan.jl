@@ -1,5 +1,5 @@
 
-using Distances
+using Distances, Base.Threads
 
 # Linear scan using PQ codebooks no rotation
 function linscan_pq(
@@ -48,19 +48,19 @@ function linscan_pq_julia(
     tables[i] = Distances.pairwise(Distances.SqEuclidean(), C[i], X[subdims[i],:])
   end
 
-  xq_dists  = zeros(Cfloat, n)
-  p         = zeros(Int32, n)
+
 
   # Compute approximate distances and sort
   @inbounds for i = 1:nq # Loop over each query
 
     # println(i)
-    xq_dists .= 0f0
+    xq_dists  = zeros(Cfloat, n)
+    p         = zeros(Cuint, n)
 
      for j = 1:m # Loop over each codebook
       t = tables[j][:,i]
 
-      @simd for k = 1:n # Loop over each code
+      for k = 1:n # Loop over each code
         xq_dists[k] += t[ Bt[k,j] ]
       end
     end
@@ -71,11 +71,10 @@ function linscan_pq_julia(
     # sortperm!(p, xq_dists; alg=PartialQuickSort(knn), initialized=true)
     # sort(xq_dists; alg=PartialQuickSort(knn))
 
-
     dists[:,i] = xq_dists[ p[1:knn] ]
     idx[:,i]   = p[1:knn]
-
-  end
+    
+  end # @inbounds
 
   return dists, idx
 
