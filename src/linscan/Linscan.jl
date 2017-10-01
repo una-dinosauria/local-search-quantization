@@ -44,28 +44,33 @@ function linscan_pq_julia(
   # Compute distance tables between queries and
   tables = Vector{Matrix{Cfloat}}(m)
   for i = 1:m
-    tables[i] = Distances.pairwise(Distances.SqEuclidean(), X[subdims[i],:], C[i])
+    # tables[i] = Distances.pairwise(Distances.SqEuclidean(), X[subdims[i],:], C[i])
+    tables[i] = Distances.pairwise(Distances.SqEuclidean(), C[i], X[subdims[i],:])
   end
 
+  xq_dists  = zeros(Cfloat, n)
+  p         = zeros(Int32, n)
+
   # Compute approximate distances and sort
-  for i = 1:nq # Loop over each query
+  @inbounds for i = 1:nq # Loop over each query
 
-    println(i)
+    # println(i)
+    xq_dists .= 0f0
 
-    xq        = X[:,i] # The query
-    xq_dists  = zeros(Cfloat, n)
-
-    @inbounds for j = 1:m # Loop over each codebook
-      t = tables[j][i,:]
+     for j = 1:m # Loop over each codebook
+      t = tables[j][:,i]
 
       @simd for k = 1:n # Loop over each code
-        # xq_dists[k] += t[ B[j,k] ]
         xq_dists[k] += t[ Bt[k,j] ]
       end
     end
 
-    p = sortperm(xq_dists; alg=PartialQuickSort(knn))
-    p = 1:n
+    # p = sortperm(xq_dists; alg=PartialQuickSort(knn))
+    sortperm!(p, xq_dists; alg=PartialQuickSort(knn))
+    # @simd for j=1:n; p[j]=j; end
+    # sortperm!(p, xq_dists; alg=PartialQuickSort(knn), initialized=true)
+    # sort(xq_dists; alg=PartialQuickSort(knn))
+
 
     dists[:,i] = xq_dists[ p[1:knn] ]
     idx[:,i]   = p[1:knn]
