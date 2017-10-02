@@ -6,7 +6,7 @@ include("../src/linscan/Linscan.jl")
 
 function demo_pq(
   dataset_name="SIFT1M",
-  ntrain::Integer=Int(1e4))
+  ntrain::Integer=Int(1e5))
 
   # === Hyperparams ===
   m       = 8
@@ -38,18 +38,8 @@ function demo_pq(
   @printf("Error in base is %e\n", base_error)
 
   # === Compute recall ===
-
-
   println("Querying m=$m ... ")
-  # B_base  = convert( Matrix{UInt8}, B_base-1 )
-  # @time dists, idx = linscan_pq( B_base, x_query[:,1:nquery], C, b, knn )
-
-
   @time dists, idx = linscan_pq( convert( Matrix{UInt8}, B_base-1 ), x_query[:,1:nquery], C, b, knn )
-
-  # @time dists2, idx2 = linscan_pq_julia( B_base, x_query[:,1:nquery], C, knn )
-
-  # @show sum(idx .== idx2) ./ (knn * nquery)
   println("done")
 
   rec = eval_recall( gt, idx, knn )

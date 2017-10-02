@@ -14,6 +14,10 @@ The code in this repository was mostly written by
 [Joris Clement](https://github.com/flyingdutchman23), and
 [Shobhit Zakhmi](https://github.com/Shobhit31).
 
+This code provides scripts to reproduce the main results in those papers.
+The core logic of the contributions in those papers are implemented in the
+[Rayuela.jl](https://github.com/una-dinosauria/Rayuela.jl) package.
+
 ## Dependencies
 
 Our code is mostly written in [Julia](http://julialang.org/), and should run
@@ -21,15 +25,12 @@ under version 0.6 or later. To get Julia, go to the
 [Julia downloads page](http://julialang.org/downloads/) and install the latest
 stable release.
 
-We use a number of dependencies that you have to install using
-`Pkg.install( "package_name" )`, where `package_name` is
+You only need to install [Rayuela.jl](https://github.com/una-dinosauria/Rayuela.jl),
+as this will pull all the other dependencies for you.
 
-* [HDF5](https://github.com/JuliaIO/HDF5.jl) -- for reading/writing data
-* [Distributions](https://github.com/JuliaStats/Distributions.jl) -- for random inits
-* [Distances](https://github.com/JuliaStats/Distances.jl) -- for quick distance computation
-* [IterativeSolvers](https://github.com/JuliaLang/IterativeSolvers.jl) -- for [LSQR](https://github.com/JuliaMath/IterativeSolvers.jl/blob/master/src/lsqr.jl)
-* [Clustering](https://github.com/JuliaStats/Clustering.jl) -- for k-means
-* [Rayuela](https://github.com/una-dinosauria/Rayuela.jl) -- for quantization implementations
+```julia
+julia> Pkg.clone("https://github.com/una-dinosauria/Rayuela.jl.git")
+```
 
 To run encoding in a GPU, you will also need
 

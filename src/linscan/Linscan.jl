@@ -32,6 +32,12 @@ function linscan_pq_julia(
   C::Vector{Matrix{Cfloat}}, # The cluster centers
   knn:: Int = 10000)           # Number of knn results to return
 
+  # Tested this on Julia 0.6 (Oct 2017). Single-threaded, this seems to be
+  # about 2-3x slower than C++, and C++ with omp scales almost linearly.
+  # Since this is the only non-Julia code here, I suggest revisiting once
+  # Julia's sorting performance improves (https://github.com/JuliaLang/julia/issues/939)
+  # and threading is more robust (ie hopefully 1.0).
+
   m, n  = size( B )
   d, nq = size( X )
   subdims = splitarray( 1:d, m )
@@ -39,7 +45,7 @@ function linscan_pq_julia(
   @show knn, nq
   dists = zeros( Cfloat, knn, nq )
   idx   = zeros(  Cuint, knn, nq )
-  Bt = B'
+  # Bt = B'
 
   # Compute distance tables between queries and
   tables = Vector{Matrix{Cfloat}}(m)
@@ -49,8 +55,8 @@ function linscan_pq_julia(
   end
 
 
-
   # Compute approximate distances and sort
+  @profile begin
   @inbounds for i = 1:nq # Loop over each query
 
     # println(i)
@@ -60,7 +66,7 @@ function linscan_pq_julia(
      for j = 1:m # Loop over each codebook
       t = tables[j][:,i]
 
-      for k = 1:n # Loop over each code
+      @simd for k = 1:n # Loop over each code
         xq_dists[k] += t[ Bt[k,j] ]
       end
     end
@@ -73,8 +79,9 @@ function linscan_pq_julia(
 
     dists[:,i] = xq_dists[ p[1:knn] ]
     idx[:,i]   = p[1:knn]
-    
+
   end # @inbounds
+  end
 
   return dists, idx
 
