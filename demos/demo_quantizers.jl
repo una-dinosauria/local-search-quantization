@@ -2,7 +2,6 @@
 import Rayuela
 
 include("../src/read/read_datasets.jl")
-include("../src/linscan/Linscan.jl")
 
 # === Hyperparams ===
 m       = 8 # Number of codebooks

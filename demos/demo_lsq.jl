@@ -2,11 +2,6 @@
 using Rayuela
 
 include("../src/read/read_datasets.jl")
-# include("../src/utils.jl")
-# include("../src/opq/OPQ.jl");
-# include("../src/chainq/chainq.jl");
-# include("../src/lsq/LSQ.jl");
-include("../src/linscan/Linscan.jl");
 
 function demo_lsq(
   dataset_name="SIFT1M",

@@ -2,7 +2,6 @@
 using Rayuela
 
 include("../src/read/read_datasets.jl")
-include("../src/linscan/Linscan.jl");
 
 function demo_opq(
   dataset_name="SIFT1M",

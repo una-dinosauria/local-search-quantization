@@ -2,7 +2,6 @@
 using Rayuela
 
 include("../src/read/read_datasets.jl")
-include("../src/linscan/Linscan.jl")
 
 function demo_pq(
   dataset_name="SIFT1M",
@@ -16,7 +15,7 @@ function demo_pq(
   nquery  = Int(1e4)
   nbase   = Int(1e6)
   knn     = Int(1e3) # Compute recall up to
-  b       = Int( log2(h) * m )
+  b       = Int(log2(h) * m)
 
   # Load data
   x_train = read_dataset(dataset_name, ntrain)
