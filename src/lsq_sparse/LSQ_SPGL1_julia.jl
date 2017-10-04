@@ -3,10 +3,10 @@ using Rayuela
 
 # include("../utils.jl")
 # include("../initializations.jl")
-include("../codebook_update_sparse.jl")
+include("../codebook_update_sparse_julia.jl")
 # include("../encodings/encode_icm.jl")
 
-function train_lsq_sparse{T <: AbstractFloat}(
+function train_lsq_sparse_julia{T <: AbstractFloat}(
   X::Matrix{T},      # d-by-n matrix of data points to train on.
   m::Integer,     # number of codebooks
   h::Integer,     # number of entries per codebook
@@ -16,7 +16,7 @@ function train_lsq_sparse{T <: AbstractFloat}(
   randord::Bool,      # whether to use random order
   npert::Integer,     # The number of codes to perturb
   S::Integer,         # Number of non-zeros allowed in the codebooks (S)
-  tau::Float64,       # The values of tau to use for all the dimensions
+  tau::Float32,       # The values of tau to use for all the dimensions
   B::Matrix{Int16},
   Cinit::Vector{Matrix{T}},
   R::Matrix{T},
@@ -55,7 +55,7 @@ function train_lsq_sparse{T <: AbstractFloat}(
   objs = zeros(Float32, niter)
 
   # Initialize C
-  C = update_codebooks_spgl1_threshold( RX, B, h, tau, C, S, spgl1_path, V )
+  C = update_codebooks_spgl1_threshold_julia( RX, B, h, tau, C, S, spgl1_path, V )
   l1n = sum( abs( vcat(C...)) )
   spC = sparse( vcat(C...))
   @printf("%d non-zero elements. l1 norm is %e \n", nnz(spC), l1n)
@@ -83,7 +83,7 @@ function train_lsq_sparse{T <: AbstractFloat}(
     @printf("%3d %e (%e better) \n", iter, obj, objlast - obj)
 
     # Update the codebooks
-    C = update_codebooks_spgl1_threshold( RX, B, h, tau, C, S, spgl1_path, V )
+    C = update_codebooks_spgl1_threshold_julia( RX, B, h, tau, C, S, spgl1_path, V )
     l1n = sum( abs(vcat(C...)) );
     spC = sparse( vcat(C...));
     @printf("%d non-zero elements. l1 norm is %e \n", nnz(spC), l1n)
@@ -101,7 +101,7 @@ function train_lsq_sparse{T <: AbstractFloat}(
   end
 
   # Get the codebook for norms
-  CB = reconstruct(B, C)
+  CB = Rayuela.reconstruct(B, C)
 
   dbnorms = zeros(Float32, 1, n)
   for i = 1:n

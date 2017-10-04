@@ -1,10 +1,7 @@
 using Rayuela
 
 include("../src/read/read_datasets.jl")
-# include("../src/utils.jl")
-# include("../src/pq/PQ.jl");
-include("../src/lsq_sparse/LSQ_SPGL1.jl");
-# include("../src/linscan/Linscan.jl");
+include("../src/lsq_sparse/LSQ_SPGL1_julia.jl");
 
 function demo_lsq_sparse(
   dataset_name="SIFT1M",
@@ -35,16 +32,16 @@ function demo_lsq_sparse(
   tau     = 0.7 # 0.7 for SLSQ1. Use 0.4 for SLSQ2
 
   # Multiply tau times the l1 norm of the PQ solution
-  taus    = zeros( d )
+  taus    = zeros( Float32, d )
   subdims = splitarray( 1:d, m )
   for i = 1:m
-    taus[ subdims[i] ] += sum( abs(C[i]), 2 ) .* tau
+    taus[ subdims[i] ] += sum( abs.(C[i]), 2 ) .* tau
   end
   tau = sum( taus )
 
   spgl1_path = joinpath( pwd(), "matlab/spgl1")
   C, B, R, train_error, cbnorms, objs =
-    train_lsq_sparse(x_train, m, h, niter, ilsiter, icmiter, randord, npert, S, tau,
+    train_lsq_sparse_julia(x_train, m, h, niter, ilsiter, icmiter, randord, npert, S, tau,
     B, C, eye(Float32, d), spgl1_path)
   cbnorms = vec( cbnorms[:] )
 
