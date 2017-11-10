@@ -2,8 +2,6 @@
 using Rayuela
 
 include("../src/read/read_datasets.jl")
-include("../src/encodings/encode_icm_cuda.jl");
-include("../src/linscan/Linscan.jl");
 
 function demo_lsq(
   dataset_name="SIFT1M",
