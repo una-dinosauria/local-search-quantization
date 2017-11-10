@@ -5,6 +5,7 @@
 *.svg
 *.h5
 *.mat
+*.o
 *.so
 .DS_Store
 ._.DS_Store
