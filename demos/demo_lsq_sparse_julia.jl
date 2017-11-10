@@ -48,7 +48,7 @@ function demo_lsq_sparse(
   # === Encode the base set ===
   nread_base   = Int(1e6)
   x_base       = read_dataset(dataset_name * "_base", nread_base )
-  B_base       = randinit(nread_base, m, h) # initialize B at random
+  B_base       = convert( Matrix{Int16}, rand(1:h, m, nread_base) ) # initialize B at random
 
   ilsiter_base = 16 # LSQ-16 in the paper
   for i = 1:ilsiter_base
