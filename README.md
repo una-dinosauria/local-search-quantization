@@ -1,6 +1,6 @@
 # Local-search Quantization
 
-This is the code for the papers
+This is the code to reproduce the results of the papers
 
 * Martinez, J., Clement, J., Hoos H. H. and Little, J. J.:
 [*Revisiting additive quantization*](https://www.cs.ubc.ca/~julm/papers/eccv16.pdf),
@@ -9,12 +9,6 @@ from ECCV 2016, and
 [*Solving multi-codebook quantization in the GPU*](https://www.cs.ubc.ca/~julm/papers/eccvw16.pdf),
 from VSM (ECCV workshops) 2016.
 
-The code in this repository was mostly written by
-[Julieta Martinez](https://github.com/una-dinosauria/),
-[Joris Clement](https://github.com/flyingdutchman23), and
-[Shobhit Zakhmi](https://github.com/Shobhit31).
-
-This code provides scripts to reproduce the main results in those papers.
 The core logic of the contributions in those papers are implemented in the
 [Rayuela.jl](https://github.com/una-dinosauria/Rayuela.jl) package.
 

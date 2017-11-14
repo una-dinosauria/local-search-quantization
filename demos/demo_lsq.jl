@@ -41,7 +41,7 @@ function demo_lsq(
   x_base       = read_dataset(dataset_name * "_base", nread_base)
   B_base       = convert(Matrix{Int16}, rand(1:h, m, nread_base))
 
-  ilsiter_base = 16 # LSQ-16 in the paper
+  ilsiter_base = 4 # LSQ-16 in the paper
   for i = 1:ilsiter_base
     @printf("Iteration %02d / %02d\n", i, ilsiter_base)
     @time B_base = Rayuela.encoding_icm( x_base, B_base, C, icmiter, randord, npert, verbose )

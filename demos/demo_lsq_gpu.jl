@@ -14,7 +14,7 @@ function demo_lsq(
   nquery  = Int(1e4)
   knn     = Int(1e3) # Compute recall up to
   b       = Int( log2(h) * m )
-  niter   = 10
+  niter   = 2
 
   # === OPQ initialization ===
   x_train              = read_dataset(dataset_name, nread )
@@ -34,6 +34,7 @@ function demo_lsq(
   npert   = 4
 
   C, B, cbnorms, B_norms, obj = train_lsq( x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert )
+  # C, B, cbnorms, B_norms, obj = train_lsq_cuda( x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert )
   cbnorms = vec( cbnorms[:] )
 
   # === Encode the base set ===
@@ -41,15 +42,18 @@ function demo_lsq(
   x_base       = read_dataset(dataset_name * "_base", nread_base )
   B_base       = convert(Matrix{Int16}, rand(1:h, m, nread_base)) # initialize B at random
 
-  ilsiter_base = 16 # LSQ-16 in the paper
-  B_base, _ = encode_icm_cuda( x_base, B_base, C, cbnorms, [ilsiter_base], icmiter, npert, randord, true )
+  ilsiter_base = 4 # LSQ-16 in the paper
+  B_base, _ = encode_icm_cuda( x_base, B_base, C, [ilsiter_base], icmiter, npert, randord )
+
   B_base    = B_base[end]
 
-  base_error = qerror( x_base, B_base[1:end-1,:], C )
+  # base_error = qerror( x_base, B_base[1:end-1,:], C )
+  base_error = qerror( x_base, B_base, C )
   @printf("Error in base is %e\n", base_error)
 
   # Compute and quantize the database norms
-  db_norms     = vec( cbnorms[ B_base[end,:] ] )
+  db_norm_codes = Rayuela.quantize_norms(B_base, C, cbnorms)
+  db_norms      = vec( cbnorms[ db_norm_codes ] )
 
   # === Compute recall ===
   x_query = read_dataset( dataset_name * "_query", nquery, verbose )
@@ -59,10 +63,9 @@ function demo_lsq(
   end
   gt           = convert( Vector{UInt32}, gt[1,1:nquery] )
   B_base       = convert( Matrix{UInt8}, B_base-1 )
-  B_base_norms = B_base[end,:]
 
   print("Querying m=$m ... ")
-  @time dists, idx = linscan_lsq( B_base[1:end-1,:], x_query, C, db_norms, eye(Float32, d), knn )
+  @time dists, idx = linscan_lsq( B_base, x_query, C, db_norms, eye(Float32, d), knn )
   println("done")
 
   idx = convert( Matrix{UInt32}, idx )
