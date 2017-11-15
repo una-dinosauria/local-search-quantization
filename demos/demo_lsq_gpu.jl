@@ -5,7 +5,7 @@ include("../src/read/read_datasets.jl")
 
 function demo_lsq(
   dataset_name="SIFT1M",
-  nread::Integer=Int(1e4)) # Increase this to 1e5 to use the full dataset
+  nread::Integer=Int(1e5)) # Increase this to 1e5 to use the full dataset
 
   # === Hyperparams ===
   m       = 7 # In LSQ we use m-1 codebooks
@@ -33,8 +33,8 @@ function demo_lsq(
   randord = true
   npert   = 4
 
-  C, B, cbnorms, B_norms, obj = train_lsq( x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert )
-  # C, B, cbnorms, B_norms, obj = train_lsq_cuda( x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert )
+  # C, B, cbnorms, B_norms, obj = train_lsq( x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert )
+  C, B, cbnorms, B_norms, obj = train_lsq_cuda( x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert )
   cbnorms = vec( cbnorms[:] )
 
   # === Encode the base set ===
@@ -42,12 +42,10 @@ function demo_lsq(
   x_base       = read_dataset(dataset_name * "_base", nread_base )
   B_base       = convert(Matrix{Int16}, rand(1:h, m, nread_base)) # initialize B at random
 
-  ilsiter_base = 4 # LSQ-16 in the paper
+  ilsiter_base = 16 # LSQ-16 in the paper
   B_base, _ = encode_icm_cuda( x_base, B_base, C, [ilsiter_base], icmiter, npert, randord )
-
   B_base    = B_base[end]
 
-  # base_error = qerror( x_base, B_base[1:end-1,:], C )
   base_error = qerror( x_base, B_base, C )
   @printf("Error in base is %e\n", base_error)
 
