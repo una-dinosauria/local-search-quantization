@@ -38,7 +38,7 @@ function demo_pq(
 
   # === Compute recall ===
   println("Querying m=$m ... ")
-  @time dists, idx = linscan_pq( convert( Matrix{UInt8}, B_base-1 ), x_query[:,1:nquery], C, b, knn )
+  @time dists, idx = linscan_pq(convert(Matrix{UInt8}, B_base-1), x_query[:,1:nquery], C, b, knn)
   println("done")
 
   rec = eval_recall( gt, idx, knn )

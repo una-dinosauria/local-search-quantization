@@ -14,7 +14,7 @@ function demo_lsq(
   nquery  = Int(1e4)
   knn     = Int(1e3) # Compute recall up to
   b       = Int( log2(h) * m )
-  niter   = 10
+  niter   = 2
 
   # === OPQ initialization ===
   x_train              = read_dataset(dataset_name, nread )
@@ -33,7 +33,7 @@ function demo_lsq(
   randord = true
   npert   = 4
 
-  C, B, cbnorms, B_norms, obj = Rayuela.train_lsq( x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert )
+  C, B, cbnorms, B_norms, obj = Rayuela.train_lsq(x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert, verbose)
   cbnorms = vec( cbnorms[:] )
 
   # === Encode the base set ===
@@ -42,12 +42,8 @@ function demo_lsq(
   B_base       = convert(Matrix{Int16}, rand(1:h, m, nread_base))
 
   ilsiter_base = 4 # LSQ-16 in the paper
-  # for i = 1:ilsiter_base
-  #   @printf("Iteration %02d / %02d\n", i, ilsiter_base)
-  #   @time B_base = Rayuela.encoding_icm( x_base, B_base, C, icmiter, randord, npert, verbose )
-  # end
-  B = encoding_icm( x_base, B_base, C, ilsiter_base, icmiter, randord, npert, verbose )
-  base_error = qerror( x_base, B_base, C )
+  B = encoding_icm(x_base, B_base, C, ilsiter_base, icmiter, randord, npert, verbose)
+  base_error = qerror(x_base, B_base, C)
   @printf("Error in base is %e\n", base_error)
 
   # Compute and quantize the database norms
@@ -55,21 +51,21 @@ function demo_lsq(
   db_norms     = vec( cbnorms[ B_base_norms ] )
 
   # === Compute recall ===
-  x_query = read_dataset( dataset_name * "_query", nquery, verbose )
-  gt      = read_dataset( dataset_name * "_groundtruth", nquery, verbose )
+  x_query = read_dataset(dataset_name * "_query", nquery, verbose)
+  gt      = read_dataset(dataset_name * "_groundtruth", nquery, verbose)
   if dataset_name == "SIFT1M" || dataset_name == "GIST1M"
     gt = gt .+ 1
   end
-  gt           = convert( Vector{UInt32}, gt[1,1:nquery] )
-  B_base       = convert( Matrix{UInt8}, B_base-1 )
-  B_base_norms = convert( Vector{UInt8}, B_base_norms-1 )
+  gt           = convert(Vector{UInt32}, gt[1,1:nquery])
+  B_base       = convert(Matrix{UInt8}, B_base-1)
+  B_base_norms = convert(Vector{UInt8}, B_base_norms-1)
 
   print("Querying m=$m ... ")
-  @time dists, idx = linscan_lsq( B_base, x_query, C, db_norms, eye(Float32, d), knn )
+  @time dists, idx = linscan_lsq(B_base, x_query, C, db_norms, eye(Float32, d), knn)
   println("done")
 
-  idx = convert( Matrix{UInt32}, idx );
-  rec = eval_recall( gt, idx, knn )
+  idx = convert(Matrix{UInt32}, idx);
+  rec = eval_recall(gt, idx, knn)
 
 end
 
