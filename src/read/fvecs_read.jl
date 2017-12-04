@@ -18,14 +18,14 @@ function fvecs_read(
     # Read the vector size
     d = read(fid, Int32, 1)
     @assert length(d) == 1
-    @show vecsizeof = 1 * 4 + d[1] * 4
+    vecsizeof = 1 * 4 + d[1] * 4
 
     # Get the number of vectrors
     seekend(fid)
     vecnum = position(fid) / vecsizeof
 
     # compute the number of vectors that are really read and go in starting positions
-    @show n = bounds.stop - bounds.start + 1
+    n = bounds.stop - bounds.start + 1
     seekstart(fid)
     skip(fid, (bounds.start - 1) * vecsizeof)
 

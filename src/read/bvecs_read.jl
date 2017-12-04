@@ -18,7 +18,7 @@ function bvecs_read(
     # Read the vector size
     d = read(fid, Int32, 1)
     @assert length(d) == 1
-    @show vecsizeof = 1 * 4 + d[1]
+    vecsizeof = 1 * 4 + d[1]
 
     # Get the number of vectrors
     seekend(fid)
