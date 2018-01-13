@@ -3,7 +3,7 @@ using Rayuela
 
 include("../src/read/read_datasets.jl")
 
-function demo_lsq(
+function demo_rq(
   dataset_name="SIFT1M",
   nread::Integer=Int(1e4)) # Increase this to 1e5 to use the full dataset
 
@@ -14,18 +14,13 @@ function demo_lsq(
   nquery  = Int(1e4)
   knn     = Int(1e3) # Compute recall up to
   b       = Int( log2(h) * m )
-  niter   = 2
+  niter   = 25
 
   # === OPQ initialization ===
   x_train              = read_dataset(dataset_name, nread )
   d, _                 = size( x_train )
-  C, B, R, train_error = Rayuela.train_opq(x_train, m, h, niter, "natural", verbose)
-  @printf("Error after OPQ is %e\n", train_error[end])
-
-  # # === ChainQ initialization ===
-  # B                    = convert( Matrix{Int16}, B )
-  # C, B, R, train_error = Rayuela.train_chainq( x_train, m, h, R, B, C, niter )
-  # @printf("Error after ChainQ is %e\n", train_error[end])
+  C, B, train_error = Rayuela.train_rq(x_train, m, h, niter, verbose)
+  @printf("Error after RQ is %e\n", train_error)
 
   # === LSQ train ===
   ilsiter = 8
@@ -34,8 +29,8 @@ function demo_lsq(
   npert   = 4
   cpp     = true
 
-  C, B, obj = Rayuela.train_lsq(x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert, cpp, verbose)
-	cbnorms, B_norms = get_norms_codebook(B, C)
+  C, B, cbnorms, B_norms, obj = Rayuela.train_lsq(x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert, cpp, verbose)
+  cbnorms = vec( cbnorms[:] )
 
   # === Encode the base set ===
   nread_base   = Int(1e6)
@@ -71,4 +66,4 @@ function demo_lsq(
 end
 
 # train
-demo_lsq()
+demo_rq()
