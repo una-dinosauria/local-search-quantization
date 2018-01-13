@@ -35,7 +35,7 @@ function demo_lsq(
   cpp     = true
 
   C, B, obj = Rayuela.train_lsq(x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert, cpp, verbose)
-	cbnorms, B_norms = get_norms_codebook(B, C)
+	norms_B, norms_C = get_norms_codebook(B, C)
 
   # === Encode the base set ===
   nread_base   = Int(1e6)
@@ -48,8 +48,8 @@ function demo_lsq(
   @printf("Error in base is %e\n", base_error)
 
   # Compute and quantize the database norms
-  B_base_norms = quantize_norms( B_base, C, cbnorms )
-  db_norms     = vec( cbnorms[ B_base_norms ] )
+  B_base_norms = quantize_norms( B_base, C, norms_C )
+  db_norms     = vec( norms_C[ B_base_norms ] )
 
   # === Compute recall ===
   x_query = read_dataset(dataset_name * "_query", nquery, verbose)
