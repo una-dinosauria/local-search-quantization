@@ -33,7 +33,7 @@ function demo_rq(
 	norms_B, norms_C = get_norms_codebook(B, C)
 
   # === Encode the base set ===
-  B_base = Rayuela.quantize_rvq(x_base, C, verbose)
+  B_base, _ = Rayuela.quantize_rvq(x_base, C, verbose)
   base_error = qerror(x_base, B_base, C)
   @printf("Error in base is %e\n", base_error)
 
