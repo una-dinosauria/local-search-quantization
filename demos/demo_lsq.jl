@@ -43,7 +43,7 @@ function demo_lsq(
   B_base       = convert(Matrix{Int16}, rand(1:h, m, nread_base))
 
   ilsiter_base = 4 # LSQ-16 in the paper
-  B = encoding_icm(x_base, B_base, C, ilsiter_base, icmiter, randord, npert, cpp, verbose)
+  B_base     = encoding_icm(x_base, B_base, C, ilsiter_base, icmiter, randord, npert, cpp, verbose)
   base_error = qerror(x_base, B_base, C)
   @printf("Error in base is %e\n", base_error)
 
