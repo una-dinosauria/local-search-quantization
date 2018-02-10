@@ -23,9 +23,9 @@ function demo_lsq(
   @printf("Error after OPQ is %e\n", train_error[end])
 
   # === ChainQ initialization ===
-  B                    = convert( Matrix{Int16}, B )
-  C, B, R, train_error = train_chainq( x_train, m, h, R, B, C, niter, verbose )
-  @printf("Error after ChainQ is %e\n", train_error[end])
+  # B                    = convert( Matrix{Int16}, B )
+  # C, B, R, train_error = train_chainq( x_train, m, h, R, B, C, niter, verbose )
+  # @printf("Error after ChainQ is %e\n", train_error[end])
 
   # === LSQ train ===
   ilsiter = 8
@@ -41,8 +41,9 @@ function demo_lsq(
   x_base       = read_dataset(dataset_name * "_base", nread_base)
   B_base       = convert(Matrix{Int16}, rand(1:h, m, nread_base))
 
-  ilsiter_base = 16 # LSQ-16 in the paper
-  B_base, _ = encode_icm_cuda( x_base, B_base, C, [ilsiter_base], icmiter, npert, randord )
+  ilsiter_base = 4 # LSQ-16 in the paper
+  # B_base, _ = encode_icm_cuda( x_base, B_base, C, [ilsiter_base], icmiter, npert, randord )
+  B_base, _ = encode_icm_cuda( x_base, B_base, C, [ilsiter_base], icmiter, npert, randord, 2 )
   B_base    = B_base[end]
   base_error = qerror( x_base, B_base, C )
   @printf("Error in base is %e\n", base_error)
