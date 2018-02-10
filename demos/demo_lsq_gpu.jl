@@ -45,6 +45,7 @@ function demo_lsq(
   # B_base, _ = encode_icm_cuda( x_base, B_base, C, [ilsiter_base], icmiter, npert, randord )
   B_base, _ = encode_icm_cuda( x_base, B_base, C, [ilsiter_base], icmiter, npert, randord, 2 )
   B_base    = B_base[end]
+  # @show B_base
   base_error = qerror( x_base, B_base, C )
   @printf("Error in base is %e\n", base_error)
 
