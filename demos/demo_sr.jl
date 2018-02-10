@@ -32,13 +32,11 @@ function demo_lsq(
   icmiter = 4
   randord = true
   npert   = 4
-  sr_method =  "SR_D"
-  schedule = 1
-  p = 0.5f0
-  alpha = 0.5f0
+  sr_method = "SR_D"
+  p       = 0.5f0
   cpp     = true
 
-  C, B, obj = Rayuela.train_sr(x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert, sr_method, schedule, p, alpha, verbose)
+  C, B, obj = Rayuela.train_sr(x_train, m, h, R, B, C, niter, ilsiter, icmiter, randord, npert, sr_method, p, cpp, verbose)
 	norms_B, norms_C = get_norms_codebook(B, C)
 
   # === Encode the base set ===
