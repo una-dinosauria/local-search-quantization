@@ -9,7 +9,7 @@ from ECCV 2016, and
 [*Solving multi-codebook quantization in the GPU*](https://www.cs.ubc.ca/~julm/papers/eccvw16.pdf),
 from VSM (ECCV workshops) 2016.
 
-The code in this repository was mostly written by [Julieta Martinez](http://www.cs.ubc.ca/~julm/) and Joris Clement.
+The code in this repository was mostly written by [Julieta Martinez](http://www.cs.ubc.ca/~julm/) and [Joris Clement](https://github.com/flyingdutchman23).
 
 ## Dependencies
 
