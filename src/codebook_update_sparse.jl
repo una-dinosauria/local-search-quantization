@@ -36,7 +36,7 @@ function update_codebooks_spgl1(
   @mput prevK
   @mput spgl1_path
 
-  @matlab addpath( spgl1_path )
+  mat"addpath( spgl1_path )"
 
   mat"options = spgSetParms()"
   mat"options.verbosity = 1"
