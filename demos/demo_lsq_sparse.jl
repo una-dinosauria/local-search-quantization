@@ -30,7 +30,7 @@ function demo_lsq_sparse(
   npert   = 4
   randord = true
   S       = d*h # SLSQ1 in the paper. Use S = d*h + (d.^2) for SLSQ2
-  tau     = 0.7 # 0.7 for SLSQ1. Use 0.4 for SLSQ2
+  tau     = 0.7 # 0.7 for SLSQ1. Use 0.9 for SLSQ2
 
   # Multiply tau times the l1 norm of the PQ solution
   taus    = zeros( d )
