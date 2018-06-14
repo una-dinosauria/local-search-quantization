@@ -27,9 +27,9 @@ We use a number of dependencies that you have to install using
 * [IterativeSolvers](https://github.com/JuliaLang/IterativeSolvers.jl) -- for [LSQR](https://github.com/JuliaMath/IterativeSolvers.jl/blob/master/src/lsqr.jl)
 * [Clustering](https://github.com/JuliaStats/Clustering.jl) -- for k-means
 
-To run encoding in a GPU, you will also need
+To run encoding in a GPU, you have to compile Julia from source (I know this sucks! but it will no longer be necessary with Julia 1.0). You will also need to install
 
-* [CUDArt](https://github.com/JuliaGPU/CUDArt.jl) -- the CUDA runtime environment
+* [CUDAdrv](https://github.com/JuliaGPU/CUDAdrv.jl) -- the CUDA driver API
 * [CUBLAS](https://github.com/JuliaGPU/CUBLAS.jl) -- for fast matrix multiplication in the GPU
 * A CUDA-enabled GPU with compute capability 3.5 or higher. We have tested our code on K40 and Titan X GPUs
 

@@ -46,14 +46,16 @@ function demo_lsq(
   B_base       = randinit(nread_base, m, h) # initialize B at random
 
   ilsiter_base = 16 # LSQ-16 in the paper
-  B_base, _ = encode_icm_cuda( x_base, B_base, C, cbnorms, [ilsiter_base], icmiter, npert, randord, true )
+  nsplits = 2 # Split the base set in two so it fits in memory. Split more if you run out of GPU memory.
+  B_base, _ = encode_icm_cuda( x_base, B_base, C, [ilsiter_base], icmiter, npert, randord, nsplits, verbose )
   B_base    = B_base[end]
 
-  base_error = qerror( x_base, B_base[1:end-1,:], C )
+  base_error = qerror( x_base, B_base, C )
   @printf("Error in base is %e\n", base_error)
 
   # Compute and quantize the database norms
-  db_norms     = vec( cbnorms[ B_base[end,:] ] )
+  dbnormsB = quantize_norms(B_base, C, cbnorms)
+  db_norms = vec( cbnorms[dbnormsB] )
 
   # === Compute recall ===
   x_query = read_dataset( dataset_name * "_query", nquery, verbose )
@@ -63,10 +65,9 @@ function demo_lsq(
   end
   gt           = convert( Vector{UInt32}, gt[1,1:nquery] )
   B_base       = convert( Matrix{UInt8}, B_base-1 )
-  B_base_norms = B_base[end,:]
 
   print("Querying m=$m ... ")
-  @time dists, idx = linscan_lsq( B_base[1:end-1,:], x_query, C, db_norms, eye(Float32, d), knn )
+  @time dists, idx = linscan_lsq( B_base, x_query, C, db_norms, eye(Float32, d), knn )
   println("done")
 
   idx = convert( Matrix{UInt32}, idx );
